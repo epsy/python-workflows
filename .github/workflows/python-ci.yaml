@@ -3,13 +3,9 @@ name: python-ci
 on:
   workflow_call:
     inputs:
-      coverage-python-version:
-        description: "Which version of Python to use for coverage testing"
-        default: &util-python-version '3.9'
-        required: false
-      lint-python-version:
-        description: "Which version of Python to use for linting"
-        default: *util-python-version
+      util-python-version:
+        description: "Which version of Python to use for coverage testing / linting"
+        default: '3.9'
         required: false
       coverage-tox-target:
         description: "Target to give to tox -e for running coverage"
@@ -19,17 +15,19 @@ on:
     secrets:
       deletate_github_token:
         required: true
+        type: string
 
 
 jobs:
   test:
-    runs-on: &runs-on 'ubuntu-latest'
+    runs-on: 'ubuntu-latest'
     continue-on-error: ${{ matrix.experimental }}
     strategy:
      matrix:
         experimental:
         - false
-        python-version: &python-versions
+        task: test
+        python-version:
         - '3.5'
         - 'pypy3'
         - '3.6'
@@ -39,52 +37,45 @@ jobs:
         - '3.10'
         include:
         - python-version: '3.10-dev'
+          task: test
           experimental: true
         - python-version: '3.11-dev'
+          task: test
           experimental: true
+        - python-version: ${{ inputs.util-python-version }}
+          task: coverage
+          experimental: false
+        - python-version: ${{ inputs.util-python-version }}
+          task: lint
+          experimental: false
 
     steps:
-    - &checkout
-      uses: actions/checkout@v2
-    - &setup-python
-      name: Setup python
+    - name: Setup python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - &setup-tox
-      name: Install tox
+        architecture: x64
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
+
     - name: Test with tox
+      if: ${{ matrix.task == 'test' }}
       run: tox
     - name: Verify that tox 'test' env ran
       run: cat ./tox-test-proof
+            - uses: actions/checkout@v2
 
-  coverage:
-    runs-on: *runs-on
-    continue-on-error: true
-    steps:
-    - *checkout
-    - <<: *setup-python
-      with:
-        python-version: ${{ inputs.coverage-python-version }}
-    - *setup-tox
     - name: 'Run coverage'
+      if: ${{ matrix.task == 'coverage' }}
       run: tox -e ${{ inputs.coverage-tox-target }}
     - name: 'Report coverage'
+      if: ${{ matrix.task == 'coverage' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.deletate_github_token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: tox -e coveralls-gh-actions
 
-  lint:
-    runs-on: *runs-on
-    continue-on-error: true
-    steps:
-    - *checkout
-    - <<: *setup-python
-      with:
-        python-version: ${{ inputs.lint-python-version }}
-    - *setup-tox
     - name: 'Run linter'
+      if: ${{ matrix.task == 'lint' }}
       run: tox -e pyflakes
