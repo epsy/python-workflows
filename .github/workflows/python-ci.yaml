@@ -24,10 +24,11 @@ jobs:
     runs-on: 'ubuntu-latest'
     continue-on-error: ${{ matrix.experimental }}
     strategy:
-     matrix:
+      matrix:
         experimental:
         - false
-        task: "test"
+        task:
+        - test
         python-version:
         - '3.5'
         - 'pypy3'
@@ -38,10 +39,10 @@ jobs:
         - '3.10'
         include:
         - python-version: '3.10-dev'
-          task: "test"
+          task: test
           experimental: true
         - python-version: '3.11-dev'
-          task: "test"
+          task: test
           experimental: true
         - python-version: ${{ inputs.util-python-version }}
           task: coverage
