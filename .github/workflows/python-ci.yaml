@@ -72,7 +72,7 @@ jobs:
       run: tox
     - name: Verify that tox 'test' env ran
       if: ${{ matrix.task == 'test' }}
-      run: cat ./tox-test-proof
+      run: cat ./tox-proof-test
 
     - name: 'Run coverage'
       if: ${{ matrix.task == 'coverage' }}
@@ -82,6 +82,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.delegate_github_token }}
       run: tox -e coveralls-gh-actions
+    - name: Verify that tox 'cover' env ran
+      if: ${{ matrix.task == 'coverage' }}
+      run: cat ./tox-proof-cover
 
     - name: 'Run linter'
       if: ${{ matrix.task == 'lint' }}
