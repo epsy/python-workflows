@@ -15,7 +15,7 @@ on:
         type: string
 
     secrets:
-      deletate_github_token:
+      delegate_github_token:
         required: true
 
 
@@ -75,7 +75,7 @@ jobs:
     - name: 'Report coverage'
       if: ${{ matrix.task == 'coverage' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.delegate_github_token }}
       run: tox -e coveralls-gh-actions
 
     - name: 'Run linter'
