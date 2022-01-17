@@ -29,7 +29,7 @@ jobs:
         - test
         python-version:
         - '3.5'
-        - 'pypy3'
+        - 'pypy-3'
         - '3.6'
         - '3.7'
         - '3.8'
