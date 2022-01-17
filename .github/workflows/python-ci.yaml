@@ -61,6 +61,10 @@ jobs:
     name: "Report coverage"
     runs-on: 'ubuntu-latest'
     steps:
+    - env:
+        GHAENV: ${{ toJSON(github.event) }}
+      run: |
+      echo $GHAENV
     - uses: ./.github/actions/install-tox.yaml
       with:
         python-version: ${{ inputs.util-python-version }}
