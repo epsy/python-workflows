@@ -11,6 +11,10 @@ on:
         description: "Which version of Python to use for linting"
         default: *util-python-version
         required: false
+      coverage-tox-target:
+        description: "Target to give to tox -e for running coverage"
+        default: cover
+        required: false
 
     secrets:
       deletate_github_token:
@@ -67,7 +71,7 @@ jobs:
         python-version: ${{ inputs.coverage-python-version }}
     - *setup-tox
     - name: 'Run coverage'
-      run: tox -e cover
+      run: tox -e ${{ inputs.coverage-tox-target }}
     - name: 'Report coverage'
       env:
         GITHUB_TOKEN: ${{ secrets.deletate_github_token }}
