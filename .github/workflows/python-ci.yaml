@@ -46,13 +46,12 @@ jobs:
       name: Setup python
       uses: actions/setup-python@v2
       with:
-      python-version: ${{ matrix.python-version }}
-      architecture: x64
+        python-version: ${{ matrix.python-version }}
     - &setup-tox
       name: Install tox
       run: |
-      python -m pip install --upgrade pip
-      pip install tox tox-gh-actions
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
     - name: Test with tox
       run: tox
     - name: Verify that tox 'test' env ran
@@ -63,7 +62,9 @@ jobs:
     continue-on-error: true
     steps:
     - *checkout
-    - *setup-python
+    - <<: *setup-python
+      with:
+        python-version: ${{ inputs.coverage-python-version }}
     - *setup-tox
     - name: 'Run coverage'
       run: tox -e cover
@@ -77,7 +78,9 @@ jobs:
     continue-on-error: true
     steps:
     - *checkout
-    - *setup-python
+    - <<: *setup-python
+      with:
+        python-version: ${{ inputs.lint-python-version }}
     - *setup-tox
     - name: 'Run linter'
       run: tox -e pyflakes
