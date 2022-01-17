@@ -47,11 +47,11 @@ jobs:
           experimental: true
 
     steps:
-    - uses: .github/actions/install-tox.yaml
+    - uses: ./.github/actions/install-tox.yaml
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Test with tox
-      uses: .github/actions/tox-ci.yaml
+      uses: ./.github/actions/tox-ci.yaml
       with:
         tox-args: ""
     - name: Verify that tox 'test' env ran
@@ -61,17 +61,17 @@ jobs:
     name: "Report coverage"
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: .github/actions/install-tox.yaml
+    - uses: ./.github/actions/install-tox.yaml
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Gather coverage with tox
-      uses: .github/actions/tox-ci.yaml
+      uses: ./.github/actions/tox-ci.yaml
       with:
         tox-args: -e ${{ inputs.coverage-tox-target }}
     - name: Verify that tox 'cover' env ran
       run: cat ./tox-proof-cover
     - name: 'Report coverage'
-      uses: .github/actions/tox-ci.yaml
+      uses: ./.github/actions/tox-ci.yaml
       env:
         GITHUB_TOKEN: ${{ secrets.delegate_github_token }}
       with:
@@ -81,11 +81,11 @@ jobs:
     name: "Run lint"
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: .github/actions/install-tox.yaml
+    - uses: ./.github/actions/install-tox.yaml
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Run linter with tox
-      uses: .github/actions/tox-ci.yaml
+      uses: ./.github/actions/tox-ci.yaml
       with:
         python-version: ${{ inputs.util-python-version }}
         tox-args: -e pyflakes
