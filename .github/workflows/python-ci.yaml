@@ -1,0 +1,83 @@
+name: python-ci
+
+on:
+  workflow_call:
+    inputs:
+      coverage-python-version:
+        description: "Which version of Python to use for coverage testing"
+        default: &util-python-version '3.9'
+        required: false
+      lint-python-version:
+        description: "Which version of Python to use for linting"
+        default: *util-python-version
+        required: false
+
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+
+
+jobs:
+  test:
+    runs-on: &runs-on 'ubuntu-latest'
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+     matrix:
+        experimental:
+        - false
+        python-version: &python-versions
+        - '3.5'
+        - 'pypy3'
+        - '3.6'
+        - '3.7'
+        - '3.8'
+        - '3.9'
+        - '3.10'
+        include:
+        - python-version: '3.10-dev'
+          experimental: true
+        - python-version: '3.11-dev'
+          experimental: true
+
+    steps:
+    - &checkout
+      uses: actions/checkout@v2
+    - &setup-python
+      name: Setup python
+      uses: actions/setup-python@v2
+      with:
+      python-version: ${{ matrix.python-version }}
+      architecture: x64
+    - &setup-tox
+      name: Install tox
+      run: |
+      python -m pip install --upgrade pip
+      pip install tox tox-gh-actions
+    - name: Test with tox
+      run: tox
+    - name: Verify that tox 'test' env ran
+      run: cat ./tox-test-proof
+
+  coverage:
+    runs-on: *runs-on
+    continue-on-error: true
+    steps:
+    - *checkout
+    - *setup-python
+    - *setup-tox
+    - name: 'Run coverage'
+      run: tox -e cover
+    - name: 'Report coverage'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: tox -e coveralls-gh-actions
+
+  lint:
+    runs-on: *runs-on
+    continue-on-error: true
+    steps:
+    - *checkout
+    - *setup-python
+    - *setup-tox
+    - name: 'Run linter'
+      run: tox -e pyflakes
