@@ -67,6 +67,7 @@ jobs:
       if: ${{ matrix.task == 'test' }}
       run: tox
     - name: Verify that tox 'test' env ran
+      if: ${{ matrix.task == 'test' }}
       run: cat ./tox-test-proof
 
     - name: 'Run coverage'
