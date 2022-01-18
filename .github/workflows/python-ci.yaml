@@ -43,11 +43,11 @@ jobs:
           experimental: true
 
     steps:
-    - uses: ./.github/actions/install-tox.yaml
+    - uses: epsy/python-workflows/.github/actions/install-tox.yaml@main
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Test with tox
-      uses: ./.github/actions/tox-ci.yaml
+      uses: epsy/python-workflows/.github/actions/tox-ci.yaml@main
       with:
         tox-args: ""
     - name: Verify that tox 'test' env ran
@@ -57,43 +57,17 @@ jobs:
     name: "Report coverage"
     runs-on: 'ubuntu-latest'
     steps:
-
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJSON(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: Dump job context
-      env:
-        JOB_CONTEXT: ${{ toJSON(job) }}
-      run: echo "$JOB_CONTEXT"
-    - name: Dump steps context
-      env:
-        STEPS_CONTEXT: ${{ toJSON(steps) }}
-      run: echo "$STEPS_CONTEXT"
-    - name: Dump runner context
-      env:
-        RUNNER_CONTEXT: ${{ toJSON(runner) }}
-      run: echo "$RUNNER_CONTEXT"
-    - name: Dump strategy context
-      env:
-        STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
-      run: echo "$STRATEGY_CONTEXT"
-    - name: Dump matrix context
-      env:
-        MATRIX_CONTEXT: ${{ toJSON(matrix) }}
-      run: echo "$MATRIX_CONTEXT"
-
-    - uses: ./.github/actions/install-tox.yaml
+    - uses: epsy/python-workflows/.github/actions/install-tox.yaml@main
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Gather coverage with tox
-      uses: ./.github/actions/tox-ci.yaml
+      uses: epsy/python-workflows/.github/actions/tox-ci.yaml@main
       with:
         tox-args: -e ${{ inputs.coverage-tox-target }}
     - name: Verify that tox 'cover' env ran
       run: cat ./tox-proof-cover
     - name: 'Report coverage'
-      uses: ./.github/actions/tox-ci.yaml
+      uses: epsy/python-workflows/.github/actions/tox-ci.yaml@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -103,11 +77,11 @@ jobs:
     name: "Run lint"
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: ./.github/actions/install-tox.yaml
+    - uses: epsy/python-workflows/.github/actions/install-tox.yaml@main
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Run linter with tox
-      uses: ./.github/actions/tox-ci.yaml
+      uses: epsy/python-workflows/.github/actions/tox-ci.yaml@main
       with:
         python-version: ${{ inputs.util-python-version }}
         tox-args: -e pyflakes
