@@ -13,6 +13,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+  - run: pwd
+    shell: bash
   - name: Run tox
     run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.args }}
     shell: bash
