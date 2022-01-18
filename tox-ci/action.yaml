@@ -14,7 +14,7 @@ runs:
   using: "composite"
   steps:
   - name: Run tox
-    run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.args }}
+    run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.tox-args }}
     shell: bash
     env:
       TOX_PROJECT_DIR: ${{ github.workspace }}
