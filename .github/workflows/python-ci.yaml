@@ -84,3 +84,5 @@ jobs:
       uses: epsy/python-workflows/tox-ci@main
       with:
         tox-args: -e pyflakes
+      env:
+        PACKAGE_FOLDER: ${{ inputs.package-folder }}
