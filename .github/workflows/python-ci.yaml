@@ -3,6 +3,20 @@ name: python-ci
 on:
   workflow_call:
     inputs:
+      python-versions:
+        description: "JSON array of which Python versions to run tests on"
+        default: |
+          [
+            '3.5',
+            'pypy3',
+            '3.6',
+            '3.7',
+            '3.8',
+            '3.9',
+            '3.10'
+          ]
+        required: false
+        type: string
       util-python-version:
         description: "Which version of Python to use for coverage testing / linting"
         default: '3.9'
@@ -26,14 +40,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        python-version:
-        - '3.5'
-        - 'pypy3'
-        - '3.6'
-        - '3.7'
-        - '3.8'
-        - '3.9'
-        - '3.10'
+        python-version: ${{ fromJSON(inputs.python-versions) }}
         experimental:
         - false
         include:
