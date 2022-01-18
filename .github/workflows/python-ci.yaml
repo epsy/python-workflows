@@ -43,7 +43,7 @@ jobs:
           experimental: true
 
     steps:
-    - uses: ./install-tox
+    - uses: epsy/python-workflows/install-tox@main
       with:
         python-version: ${{ inputs.util-python-version }}
     - name: Test with tox
