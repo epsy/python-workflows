@@ -17,4 +17,4 @@ runs:
     run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.args }}
     shell: bash
     env:
-      TOX_SETUP_DIR: ${{ github.workspace }}
+      TOX_PROJECT_DIR: ${{ github.workspace }}
