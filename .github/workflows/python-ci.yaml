@@ -45,7 +45,7 @@ jobs:
     steps:
     - uses: epsy/python-workflows/install-tox@main
       with:
-        python-version: ${{ inputs.util-python-version }}
+        python-version: ${{ matrix.python-version }}
     - name: Test with tox
       uses: epsy/python-workflows/tox-ci@main
       with:
@@ -83,5 +83,4 @@ jobs:
     - name: Run linter with tox
       uses: epsy/python-workflows/tox-ci@main
       with:
-        python-version: ${{ inputs.util-python-version }}
         tox-args: -e pyflakes
