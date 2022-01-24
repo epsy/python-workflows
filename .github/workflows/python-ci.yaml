@@ -31,6 +31,11 @@ on:
         description: "What folders contains the source of this package"
         required: true
         type: string
+      python-test-args:
+        description: "What arguments to pass to python or coverage to run tests"
+        required: false
+        type: string
+        default: -m unittest
 
 
 jobs:
@@ -57,6 +62,7 @@ jobs:
       uses: epsy/python-workflows/tox-ci@main
       with:
         tox-args: ""
+        python-test-args: ${{ inputs.python-test-args }}
     - name: Verify that tox 'test' env ran
       run: cat ./tox-proof-test
 
@@ -71,6 +77,8 @@ jobs:
       uses: epsy/python-workflows/tox-ci@main
       with:
         tox-args: -e ${{ inputs.coverage-tox-target }}
+        python-test-args: ${{ inputs.python-test-args }}
+
     - name: Verify that tox 'cover' env ran
       run: cat ./tox-proof-cover
     - name: 'Report coverage'
@@ -79,6 +87,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tox-args: -e coveralls-gh-actions
+        python-test-args: ${{ inputs.python-test-args }}
 
   lint:
     name: "Run lint"
@@ -91,5 +100,6 @@ jobs:
       uses: epsy/python-workflows/tox-ci@main
       with:
         tox-args: -e pyflakes
+        python-test-args: ${{ inputs.python-test-args }}
       env:
         PACKAGE_FOLDER: ${{ inputs.package-folder }}

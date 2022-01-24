@@ -9,6 +9,10 @@ inputs:
     description: "Arguments to pass to tox"
     required: true
     type: string
+  python-test-args:
+    description: "What arguments to pass to python or coverage to run tests"
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -18,3 +22,4 @@ runs:
     shell: bash
     env:
       TOX_PROJECT_DIR: ${{ github.workspace }}
+      TOX_PYTHON_TEST_ARGS: ${{ inputs.python-test-args }}
