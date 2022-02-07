@@ -13,10 +13,19 @@ inputs:
     description: "What arguments to pass to python or coverage to run tests"
     required: true
     type: string
+  problem-matcher:
+    description: "Which problem matcher to use, if any"
+    required: false
+    type: string
+    default: ""
 
 runs:
   using: "composite"
   steps:
+  - name: Enable problem matching
+    if: ${{ inputs.problem-matcher != "" }}
+    run: echo "::add-matcher::${{ github.action_path }}/problem-matchers/${{ inputs.problem-matcher }}.json"
+    shell: bash
   - name: Run tox
     run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.tox-args }}
     shell: bash
@@ -24,3 +33,7 @@ runs:
       TOX_PROJECT_DIR: ${{ github.workspace }}
       TOX_PYTHON_TEST_ARGS: ${{ inputs.python-test-args }}
       RUN_PYFLAKES_BIN: ${{ github.action_path }}/run-pyflakes.sh
+  - name: Disable problem matching
+    if: ${{ inputs.problem-matcher != "" }}
+    run: echo "::remove-matcher ${{ inputs.problem-matcher }}::"
+    shell: bash
