@@ -101,5 +101,6 @@ jobs:
       with:
         tox-args: -e pyflakes
         python-test-args: ${{ inputs.python-test-args }}
+        problem-matcher: pyflakes
       env:
         PACKAGE_FOLDER: ${{ inputs.package-folder }}
