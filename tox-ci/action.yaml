@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
   - name: Enable problem matching
-    if: ${{ inputs.problem-matcher != "" }}
+    if: ${{ inputs.problem-matcher != '' }}
     run: echo "::add-matcher::${{ github.action_path }}/problem-matchers/${{ inputs.problem-matcher }}.json"
     shell: bash
   - name: Run tox
@@ -34,6 +34,6 @@ runs:
       TOX_PYTHON_TEST_ARGS: ${{ inputs.python-test-args }}
       RUN_PYFLAKES_BIN: ${{ github.action_path }}/run-pyflakes.sh
   - name: Disable problem matching
-    if: ${{ inputs.problem-matcher != "" }}
+    if: ${{ inputs.problem-matcher != '' }}
     run: echo "::remove-matcher ${{ inputs.problem-matcher }}::"
     shell: bash
