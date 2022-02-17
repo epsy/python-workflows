@@ -35,5 +35,5 @@ runs:
       RUN_PYFLAKES_BIN: ${{ github.action_path }}/run-pyflakes.sh
   - name: Disable problem matching
     if: ${{ inputs.problem-matcher != '' }}
-    run: echo "::remove-matcher ${{ inputs.problem-matcher }}::"
+    run: echo "::remove-matcher owner=${{ inputs.problem-matcher }}::"
     shell: bash
