@@ -22,6 +22,18 @@ inputs:
 runs:
   using: "composite"
   steps:
+  - name: "Are we using isolated builds?"
+    id: get-is-isolated-build
+    shell: bash
+    run: >
+      if grep '^[build-system]$' pyproject.toml >/dev/null 2>&1
+      then
+        echo "::set-output name=is-isolated-build::true"
+        echo "Yes"
+      else
+        echo "::set-output name=is-isolated-build::false"
+        echo "No"
+      fi
   - name: Enable problem matching
     if: ${{ inputs.problem-matcher != '' }}
     run: echo "::add-matcher::${{ github.action_path }}/problem-matchers/${{ inputs.problem-matcher }}.json"
@@ -32,6 +44,7 @@ runs:
     env:
       TOX_PROJECT_DIR: ${{ github.workspace }}
       TOX_PYTHON_TEST_ARGS: ${{ inputs.python-test-args }}
+      TOX_ISOLATED_BUILD: ${{ steps.get-is-isolated-build.outputs.is-isolated-build }}
       RUN_PYFLAKES_BIN: ${{ github.action_path }}/run-pyflakes.sh
   - name: Disable problem matching
     if: ${{ inputs.problem-matcher != '' }}
