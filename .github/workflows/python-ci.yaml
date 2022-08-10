@@ -55,7 +55,7 @@ jobs:
           experimental: true
 
     steps:
-    - uses: epsy/python-workflows/install-tox@ykaiser/py311rc
+    - uses: epsy/python-workflows/install-tox@main
       with:
         python-version: ${{ matrix.python-version }}
     - name: Test with tox
