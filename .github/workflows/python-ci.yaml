@@ -7,7 +7,7 @@ on:
         description: "JSON array of which Python versions to run tests on"
         default: |
           [
-            'pypy3',
+            'pypy3.9',
             '3.6',
             '3.7',
             '3.8',
