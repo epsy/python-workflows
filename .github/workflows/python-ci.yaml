@@ -65,6 +65,7 @@ jobs:
         python-test-args: ${{ inputs.python-test-args }}
     - name: Verify that tox 'test' env ran
       run: cat ./tox-proof-test
+      shell: bash
 
   cover:
     name: "Report coverage"
