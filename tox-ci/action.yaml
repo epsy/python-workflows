@@ -39,7 +39,8 @@ runs:
     run: echo "::add-matcher::${{ github.action_path }}/problem-matchers/${{ inputs.problem-matcher }}.json"
     shell: bash
   - name: Run tox
-    run: tox -c ${{ github.action_path }}/tox-ci.ini ${{ inputs.tox-args }}
+    run: tox -c '${{ github.action_path }}/tox-ci.ini' ${{ inputs.tox-args }}
+    # xcxc split args manually
     shell: bash
     env:
       TOX_PROJECT_DIR: ${{ github.workspace }}
