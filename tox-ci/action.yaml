@@ -40,7 +40,6 @@ runs:
     shell: bash
   - name: Run tox
     run: tox -c '${{ github.action_path }}/tox-ci.ini' ${{ inputs.tox-args }}
-    # xcxc split args manually
     shell: bash
     env:
       TOX_PROJECT_DIR: ${{ github.workspace }}
