@@ -41,7 +41,6 @@ on:
 jobs:
   test:
     name: "Run tests"
-    runs-on: 'ubuntu-latest'
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
@@ -53,6 +52,8 @@ jobs:
           experimental: true
         - python-version: '3.11-dev'
           experimental: true
+
+    runs-on: ${{ startsWith(matrix.python-version, '3.6') && 'ubuntu-20.04' || 'ubuntu-latest' }}
 
     steps:
     - uses: epsy/python-workflows/install-tox@main
