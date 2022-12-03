@@ -53,7 +53,7 @@ jobs:
         - python-version: '3.11-dev'
           experimental: true
 
-    runs-on: ${{ startsWith(matrix.python-version, "3.6") && 'ubuntu-20.04' || 'ubuntu-latest' }}
+    runs-on: ${{ startsWith(matrix.python-version, '3.6') && 'ubuntu-20.04' || 'ubuntu-latest' }}
 
     steps:
     - uses: epsy/python-workflows/install-tox@main
